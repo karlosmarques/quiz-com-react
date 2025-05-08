@@ -18,6 +18,7 @@ const Login = () => {
         <div>
             <form className='form-login'>
                 <div>
+                    <label className='label-login-text'>Faça o seu login</label>
                     <label className='label-login-nome'>Email:</label>
                     <input 
                     className='input-login-nome'

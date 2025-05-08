@@ -1,20 +1,28 @@
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import { useNavigate } from 'react-router-dom';
 
-function cards({info}) {
+function Cards({ info }) {
+  const navigate = useNavigate();
+
   return (
-    <Card style={{ width: '18rem' }}>
-      <Card.Img variant="top" src="holder.js/100px180" />
-      <Card.Body>
-        <Card.Title>Card Title</Card.Title>
-        <Card.Text>
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </Card.Text>
-        <Button variant="primary">Go somewhere</Button>
-      </Card.Body>
-    </Card>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center' }}>
+      {info.map((item, key) => (
+        <Card key={key} style={{ width: '18rem' }}>
+          <Card.Img src='/quiz.png' alt="Quiz" />
+          <Card.Body style={{ textAlign: 'center' }}>
+            <Card.Title>{item.name}</Card.Title>
+            <Button
+              variant="primary"
+              onClick={() => navigate(`/quiz/${item.id}/${(item.name)}`)}>
+              Ver perguntas
+            </Button>
+          </Card.Body>
+        </Card>
+      ))}
+    </div>
   );
 }
 
-export default cards;
+export default Cards;
+
