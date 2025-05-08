@@ -4,18 +4,24 @@ import Registro from "./pages/Registro/Registro";
 import Home from "./pages/Home/Home";
 import Navbar from "./components/Navbar/Navbar";
 import Paginaquiz from "./pages/Paginaquiz/Paginaquiz";
+import Perfil from "./pages/perfil/perfil";
+import CriarQuiz from "./pages/CriarQuiz/Criar";
+
 
 function App() {
   return (
     <div>
 
       <Navbar/>
-      <Routes>
-      <Route path="/" element={<Login/>} />
+    <Routes>
+      <Route path="/login" element={<Login/>} />
       <Route path="/registro" element={<Registro/>} />
-      <Route path="/home" element={<Home/>} />
+      <Route path="/" element={<Home/>} />
       <Route path="/quiz/:categoriaId/:categoria" element={<Paginaquiz />} />
-      </Routes>
+      <Route path = "/login" element={<Login/>}/>
+      <Route path = "/perfil" element={<Perfil/>}/>
+      <Route path = "/criarquiz" element={<CriarQuiz/>}/>
+    </Routes>
       
     </div>
   );

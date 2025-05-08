@@ -23,6 +23,7 @@ const Registro = () => {
         <div>
             <form className='form-registro'>
                 <div>
+                    <h1>Cadastrar-se</h1>
                     <label className='label-nome-registro'>Nome:</label>
                     <input 
                     className='input-nome-registro'
@@ -66,7 +67,7 @@ const Registro = () => {
                     onChange={(e)=> setConfirmarSenha(e.target.value)}/>
                 </div>
                 <div>
-                    <label className='label-data-registro'>data de nascimento:</label>
+                    <label className='label-data-registro'>Data de Nascimento:</label>
                     <input 
                     className='input-data-registro'
                     type="date"

@@ -1,78 +1,77 @@
 
-  .form-login {
-    background-color: #ffffff;
-    padding: 30px;
-    margin: 60px auto;
-    max-width: 400px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(30, 42, 56, 0.1);
-  }
-  .label-login-text{
-    display: flex;
-    justify-content: center;
-    font-weight: 700;
+.form-login {
+  background-color: #ffffff;
+  padding: 30px;
+  margin: 60px auto;
+  max-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(30, 42, 56, 0.1);
+}
+.label-login-text{
+  display: flex;
+  justify-content: center;
+  font-weight: 700;
 
-  
-  }
-  
- 
-  .label-login-nome,
-  .label-senha-login {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
-    color: #1e2a38;
-  }
-  
 
-  .input-login-nome,
-  .input-senha-login {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccd6e0;
-    border-radius: 5px;
-    background-color: #f9fbfd;
-    color: #1e2a38;
-    font-size: 14px;
-  }
-  
-  .input-login-nome::placeholder,
-  .input-senha-login::placeholder {
-    color: #99a3b3;
-  }
-  
- 
-  .button-login {
-    width: 100%;
-    padding: 10px;
-    background-color: #2962ff;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .button-login:hover {
-    background-color: #0039cb;
-  }
-  
+}
 
-  .p-login {
-    text-align: center;
-    margin-top: 15px;
-    font-size: 14px;
-  }
-  
-  .p-login a {
-    color: #0077b6;
-    text-decoration: none;
-    font-weight: 500;
-  }
-  
-  .p-login a:hover {
-    text-decoration: underline;
-  }
-  
+
+.label-login-nome,
+.label-senha-login {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #1e2a38;
+}
+
+
+.input-login-nome,
+.input-senha-login {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccd6e0;
+  border-radius: 5px;
+  background-color: #f9fbfd;
+  color: #1e2a38;
+  font-size: 14px;
+}
+
+.input-login-nome::placeholder,
+.input-senha-login::placeholder {
+  color: #99a3b3;
+}
+
+
+.button-login {
+  width: 100%;
+  padding: 10px;
+  background-color: #2962ff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button-login:hover {
+  background-color: #0039cb;
+}
+
+
+.p-login {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.p-login a {
+  color: #0077b6;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.p-login a:hover {
+  text-decoration: underline;
+}
