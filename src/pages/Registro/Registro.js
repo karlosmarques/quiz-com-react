@@ -7,14 +7,12 @@ const Registro = () => {
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-    const [confirmarSenha, setConfirmarSenha] = useState('');
     const [dataNascimento, setDataNascimento] = useState('');
 
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log('Email:', email);
         console.log('Senha:', senha);
-        console.log('Confirmar Senha:', confirmarSenha);
         console.log('Data de Nascimento:', dataNascimento);
     }
        
@@ -55,16 +53,6 @@ const Registro = () => {
                     placeholder='Digite sua senha'
                     value={senha}
                     onChange={(e)=> setSenha(e.target.value)}/>
-                </div>
-                <div>
-                    <label className='label-confirmar-senha-registro'>Confirmar Senha:</label>
-                    <input
-                    className='input-confirmar-senha-registro' 
-                    type="password" 
-                    required 
-                    placeholder='Confirme sua senha'
-                    value={confirmarSenha}
-                    onChange={(e)=> setConfirmarSenha(e.target.value)}/>
                 </div>
                 <div>
                     <label className='label-data-registro'>Data de Nascimento:</label>
