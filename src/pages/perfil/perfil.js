@@ -1,36 +1,74 @@
-
-
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 
 const Perfil = () => {
-    return (
-        <main style={{ paddingTop: '70px' }}>
-            <div className="container text-center mt-5">
-                <div className="row justify-content-center">
-                    <div className="col-md-6">
-                     
-                            <img
-                                src="/thebruxo.png"
-                                className="rounded-circle mx-auto d-block mb-3"
-                                alt="Foto de perfil"
-                                style={{ width: '150px', height: '150px' }}
-                            />
-                            <h3>Bruxo da Silva</h3>
-                            <p className="text-muted">bruxoSilva@gmail.com</p><br/><br/>
+  const [usuario, setUsuario] = useState(null);
+  const navigate = useNavigate();
 
-                            <h4 >Quizes criados por mim:</h4><br/><br/>
-                            <h4 > Quizes respondidos:</h4><br/><br/><br/><br/>
-                            <div className="d-grid gap-2 d-md-block">
-                                <a href="./login.html" className="btn btn-danger">
-                                    Sair
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-           
-        </main>
-    );
+  useEffect(() => {
+    const buscarUsuario = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          navigate("/login");
+          return;
+        }
+
+        const response = await axios.get('http://localhost:8000/usuario', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        setUsuario(response.data.usuario);
+
+      } catch (error) {
+        console.error("Erro ao buscar o perfil:", error);
+        navigate("/login");
+      }
+    };
+
+    buscarUsuario();
+  }, [navigate]);
+
+  const Sair = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
+  if (!usuario) {
+    return <p>Carregando perfil...</p>;
+  }
+
+  return (
+    <main style={{ paddingTop: '70px' }}>
+      <div className="container text-center mt-5">
+        <div className="row justify-content-center">
+          <div className="col-md-6">
+            <img
+              src="/thebruxo.png"
+              className="rounded-circle mx-auto d-block mb-3"
+              alt="Foto de perfil"
+              style={{ width: '150px', height: '150px' }}
+            />
+            <h3>{usuario.nome}</h3>
+            <p className="text-muted">{usuario.email}</p><br /><br />
+
+            <h4>Quizes criados por mim:</h4><br /><br />
+            <h4>Quizes respondidos:</h4><br /><br /><br /><br />
+
+            <div className="d-grid gap-2 d-md-block">
+              <button onClick={Sair} className="btn btn-danger">
+                Sair
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
 };
 
 export default Perfil;
