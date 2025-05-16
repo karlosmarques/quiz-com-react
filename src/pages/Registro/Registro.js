@@ -1,7 +1,10 @@
 import React from 'react';
 import { useState} from 'react';
-import { Link } from 'react-router-dom';
+
 import './Registro.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 const Registro = () => {
     const [nome, setNome] = useState('');
@@ -9,12 +12,30 @@ const Registro = () => {
     const [senha, setSenha] = useState('');
     const [dataNascimento, setDataNascimento] = useState('');
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log('Email:', email);
-        console.log('Senha:', senha);
-        console.log('Data de Nascimento:', dataNascimento);
+
+    const navigate = useNavigate();
+
+const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log(nome, email, senha, dataNascimento);
+
+    try {
+        const response = await axios.post('http://localhost:8000/registro', {
+            nome: nome,
+            email: email,
+            senha: senha,
+            datanascimento: dataNascimento
+        });
+
+        if (response.status === 201) {
+            navigate("/login");
+        }
+    } catch (error) {
+        console.error('Erro ao registrar usuário:', error);
+        alert('Erro ao registrar usuário. Tente novamente mais tarde.');
     }
+};
+
        
     return (
 
