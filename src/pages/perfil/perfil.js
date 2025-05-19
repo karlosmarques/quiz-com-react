@@ -57,6 +57,7 @@ const Perfil = () => {
             <p className="text-muted">{usuario.email}</p><br /><br />
 
             <h4>Quizes criados por mim:</h4><br /><br />
+            
             <h4>Quizes respondidos:</h4><br /><br /><br /><br />
 
             <div className="d-grid gap-2 d-md-block">

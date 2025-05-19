@@ -12,16 +12,17 @@ const CardPergunta = ({ perguntas, categoria }) => {
       const embaralhadas = todas.sort(() => Math.random() - 0.5);
       return { ...q, respostas: embaralhadas };
     });
-    setPerguntasEmbaralhadas(embaralhadas);
+    setPerguntasEmbaralhadas(embaralhadas)
   }, [perguntas]);
 
   const handleResposta = (indice, resposta, correta) => {
-    if (respostasSelecionadas[indice]) return;
+    if (respostasSelecionadas[indice]) 
+    return
 
     setRespostasSelecionadas((prev) => ({ ...prev, [indice]: resposta }));
 
     if (resposta === correta) {
-      setAcertos((prev) => prev + 1);
+      setAcertos((prev) => prev + 1)
     }
   };
 

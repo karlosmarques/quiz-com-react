@@ -17,14 +17,17 @@ const Registro = () => {
 
 const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(nome, email, senha, dataNascimento);
+
+    const credentials = {
+        nome: nome,
+        email: email,
+        senha: senha,
+        datanascimento: dataNascimento
+    };
 
     try {
-        const response = await axios.post('http://localhost:8000/registro', {
-            nome: nome,
-            email: email,
-            senha: senha,
-            datanascimento: dataNascimento
+        const response = await axios.post('http://localhost:8000/registro', credentials, {
+            
         });
 
         if (response.status === 201) {
