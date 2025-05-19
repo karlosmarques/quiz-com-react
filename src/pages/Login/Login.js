@@ -45,7 +45,7 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Erro durante o login:", error);
-      alert("Erro ao fazer login. Verifique suas credenciais.");
+      alert("Erro ao fazer login verifique suas credenciais.");
     }
   };
 

@@ -36,6 +36,7 @@ const Perfil = () => {
   const Sair = () => {
     localStorage.removeItem("token");
     navigate("/login");
+    localStorage.clear();
   };
 
   if (!usuario) {
