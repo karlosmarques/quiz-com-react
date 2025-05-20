@@ -34,7 +34,7 @@ const Login = () => {
       if (response.status === 200) {
         const token = response.data;
         localStorage.setItem("token", token);
-
+        console.log(token)
         const decoded = jwtDecode(token);
         console.log("Token decodificado:", decoded);
 
