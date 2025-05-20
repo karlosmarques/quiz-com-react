@@ -11,10 +11,7 @@ const Perfil = () => {
     const buscarUsuario = async () => {
       try {
         const token = localStorage.getItem('token');
-        if (!token) {
-          navigate("/login");
-          return;
-        }
+      
 
         const response = await axios.get('http://localhost:8000/usuario', {
           headers: {
@@ -36,7 +33,7 @@ const Perfil = () => {
   const Sair = () => {
     localStorage.removeItem("token");
     navigate("/login");
-    localStorage.clear();
+  
   };
 
   if (!usuario) {

@@ -4,25 +4,31 @@ import axios from 'axios';
 import './Home.css';
 
 const Home = () => {
-  const [info, setInfo] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
 
   useEffect(() => {
-    axios.get('https://opentdb.com/api_category.php')
-    .then((response) => {
-     setInfo(response.data.trivia_categories);
-     console.log(response.data.trivia_categories);
-    })
-    .catch((error) => {
-      console.error('Erro ao buscar categorias:', error);
-    }
-  );
+    const fetchQuizzes = async () => {
+      const token = localStorage.getItem('token');
+      try {
+        const response = await axios.get('http://localhost:8000/quizzes', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setQuizzes(response.data.quizzes);
+        console.log(response.data.quizzes);
+      } catch (error) {
+        console.error('Erro ao buscar quizzes:', error);
+      }
+    };
 
-}, []);
+    fetchQuizzes();
+  }, []);
 
   return (
     <div className='home-container'>
-      <h1 className='title-home'>Bem-vindo à página inicial!</h1>
-      <Cards info={info} />
+      <h1 className='title-home'>Quizzes Disponíveis</h1>
+      <Cards quizzes={quizzes} />
     </div>
   );
 };

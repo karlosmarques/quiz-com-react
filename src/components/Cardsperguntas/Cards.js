@@ -7,22 +7,23 @@ const CardPergunta = ({ perguntas, categoria }) => {
   const [perguntasEmbaralhadas, setPerguntasEmbaralhadas] = useState([]);
 
   useEffect(() => {
+    // Para cada pergunta, embaralha as respostas (answers)
     const embaralhadas = perguntas.map((q) => {
-      const todas = [...q.incorrect_answers, q.correct_answer];
-      const embaralhadas = todas.sort(() => Math.random() - 0.5);
-      return { ...q, respostas: embaralhadas };
+      const todas = [...q.answers]; // array de respostas
+      // embaralha array de respostas
+      const respostasEmbaralhadas = todas.sort(() => Math.random() - 0.5);
+      return { ...q, respostas: respostasEmbaralhadas };
     });
-    setPerguntasEmbaralhadas(embaralhadas)
+    setPerguntasEmbaralhadas(embaralhadas);
   }, [perguntas]);
 
-  const handleResposta = (indice, resposta, correta) => {
-    if (respostasSelecionadas[indice]) 
-    return
+  const handleResposta = (indice, respostaId, correta) => {
+    if (respostasSelecionadas[indice]) return;
 
-    setRespostasSelecionadas((prev) => ({ ...prev, [indice]: resposta }));
+    setRespostasSelecionadas((prev) => ({ ...prev, [indice]: respostaId }));
 
-    if (resposta === correta) {
-      setAcertos((prev) => prev + 1)
+    if (correta) {
+      setAcertos((prev) => prev + 1);
     }
   };
 
@@ -33,35 +34,34 @@ const CardPergunta = ({ perguntas, categoria }) => {
         Acertos: {acertos} / {perguntas.length}
       </div>
 
-      {perguntasEmbaralhadas.length === 0 && <p>Carregando perguntas...</p>}  
+      {perguntasEmbaralhadas.length === 0 && <p>Carregando perguntas...</p>}
       {perguntasEmbaralhadas.map((questao, index) => (
-        <div key={index} className="card-pergunta">
-          <p className="pergunta" dangerouslySetInnerHTML={{ __html: questao.question }} />
+        <div key={questao.id} className="card-pergunta">
+          <p className="pergunta">{questao.texto}</p>
           <div className="respostas">
-            {questao.respostas.map((resposta, i) => {
+            {questao.respostas.map((resposta) => {
               const selecionada = respostasSelecionadas[index];
-              const correta = questao.correct_answer;
               let classe = '';
 
               if (selecionada) {
-                if (resposta === correta) classe = 'correta';
-                else if (resposta === selecionada && resposta !== correta) classe = 'errada';
+                if (resposta.correta) classe = 'correta';
+                else if (resposta.id === selecionada && !resposta.correta) classe = 'errada';
               }
 
               return (
                 <button
-                  key={i}
+                  key={resposta.id}
                   className={`botao-resposta ${classe}`}
-                  onClick={() => handleResposta(index, resposta, correta)}
+                  onClick={() => handleResposta(index, resposta.id, resposta.correta)}
                   disabled={!!selecionada}
-                  dangerouslySetInnerHTML={{ __html: resposta }}
-                />
+                >
+                  {resposta.texto}
+                </button>
               );
             })}
           </div>
         </div>
       ))}
-      
     </div>
   );
 };

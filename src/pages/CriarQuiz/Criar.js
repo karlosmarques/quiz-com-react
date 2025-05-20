@@ -1,131 +1,226 @@
-import { useState } from 'react';
+import { useState } from "react";
+import axios from "axios";
 
-function QuizCreator() {
-  const [quizTitle, setQuizTitle] = useState('');
-  const [quizDescription, setQuizDescription] = useState('');
-  const [category, setCategory] = useState('');
-  const [file, setFile] = useState(null);
+export default function CreateQuiz() {
+  const [titulo, setTitulo] = useState("");
 
+  // Função que cria 4 objetos de respostas distintas
+  const criarRespostasIniciais = () => [
+    { texto: "", correta: false },
+    { texto: "", correta: false },
+    { texto: "", correta: false },
+    { texto: "", correta: false }
+  ];
 
-    const hanleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Quiz Title:', quizTitle);
-        console.log('Quiz Description:', quizDescription);
-        console.log('Category:', category);
-        console.log('File:', file);
+  const [perguntas, setPerguntas] = useState([
+    {
+      texto: "",
+      respostas: criarRespostasIniciais()
     }
+  ]);
+
+  const adicionarPergunta = () => {
+    if (perguntas.length < 10) {
+      setPerguntas([
+        ...perguntas,
+        { texto: "", respostas: criarRespostasIniciais() }
+      ]);
+    }
+  };
+
+  const excluirPergunta = (index) => {
+    if (perguntas.length > 1) {
+      const novasPerguntas = [...perguntas];
+      novasPerguntas.splice(index, 1);
+      setPerguntas(novasPerguntas);
+    }
+  };
+
+  const atualizarTextoPergunta = (index, texto) => {
+    const novasPerguntas = [...perguntas];
+    novasPerguntas[index].texto = texto;
+    setPerguntas(novasPerguntas);
+  };
+
+  const atualizarTextoResposta = (indexPergunta, indexResposta, texto) => {
+    const novasPerguntas = [...perguntas];
+    novasPerguntas[indexPergunta].respostas[indexResposta] = {
+      ...novasPerguntas[indexPergunta].respostas[indexResposta],
+      texto
+    };
+    setPerguntas(novasPerguntas);
+  };
+
+  const marcarRespostaCorreta = (indexPergunta, indexResposta) => {
+    const novasPerguntas = [...perguntas];
+    novasPerguntas[indexPergunta].respostas = novasPerguntas[
+      indexPergunta
+    ].respostas.map((resposta, i) => ({
+      ...resposta,
+      correta: i === indexResposta
+    }));
+    setPerguntas(novasPerguntas);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+
+    try {
+      // Criar o quiz
+      const quizResponse = await axios.post(
+        "http://localhost:8000/quizzes",
+        { titulo },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      const quizId = quizResponse.data.quiz.id;
+
+      //Criar perguntas e respostas
+      for (const pergunta of perguntas) {
+        const perguntaResponse = await axios.post(
+          "http://localhost:8000/questions",
+          {
+            quiz_id: quizId,
+            texto: pergunta.texto
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        const perguntaId = perguntaResponse.data.question.id;
+
+        for (const resposta of pergunta.respostas) {
+          await axios.post(
+            "http://localhost:8000/answers",
+            {
+              question_id: perguntaId,
+              texto: resposta.texto,
+              correta: resposta.correta
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          );
+        }
+      }
+
+      alert("Quiz criado com sucesso!");
+      setTitulo("");
+      setPerguntas([
+        {
+          texto: "",
+          respostas: criarRespostasIniciais()
+        }
+      ]);
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao criar o quiz. Verifique o console.");
+    }
+  };
 
   return (
     <div className="container mt-4">
-      <h1 className="text-center">Crie seu Quiz</h1>
-
-      <h3>
-        <label htmlFor="quizImage" className="form-label">
-          Escolha a imagem do quiz
-        </label>
-      </h3>
-      <div className="input-group mb-3">
-        <input
-          type="file"
-          className="form-control"
-          id="inputGroupFile04"
-          aria-describedby="inputGroupFileAddon04"
-          aria-label="Upload"
-          onChange={(e) => setFile(e.target.files[0])}
-        />
-        <button className="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">
-          Enviar
-        </button>
-      </div>
-
-      <form>
+      <h1 className="mb-4">Criar Quiz</h1>
+      <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <h3>
-            <label htmlFor="quizTitle" className="form-label">
-              Título do Quiz
-            </label>
-          </h3>
+          <label className="form-label">Título do Quiz</label>
           <input
             type="text"
             className="form-control"
-            id="quizTitle"
-            placeholder="Digite o título"
-            value={quizTitle}
-            onChange={(e) => setQuizTitle(e.target.value)}
+            value={titulo}
+            onChange={(e) => setTitulo(e.target.value)}
+            required
           />
         </div>
 
-        <div className="mb-3">
-          <h3>
-            <label htmlFor="quizDescription" className="form-label">
-              Descrição
-            </label>
-          </h3>
-          <textarea
-            className="form-control"
-            id="quizDescription"
-            rows="2"
-            placeholder="Descreva o quiz"
-            value={quizDescription}
-            onChange={(e) => setQuizDescription(e.target.value)}
-          ></textarea>
-        </div>
-
-        <div id="questionsContainer">
-          <div className="card mb-3">
+        {perguntas.map((pergunta, indexPergunta) => (
+          <div key={indexPergunta} className="card mb-4">
             <div className="card-body">
-              <h4>
-                <label className="form-label">Pergunta 1</label>
-              </h4>
-              <input type="text" className="form-control mb-2" placeholder="Digite a pergunta" />
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <label className="form-label mb-0">
+                  Pergunta {indexPergunta + 1}
+                </label>
+                <button
+                  type="button"
+                  className="btn btn-outline-danger btn-sm"
+                  onClick={() => excluirPergunta(indexPergunta)}
+                  disabled={perguntas.length === 1}
+                >
+                  Excluir Pergunta
+                </button>
+              </div>
 
-              {['A', 'B', 'C', 'D'].map((letter, index) => (
-                <div className="form-check mb-2" key={index}>
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="question1"
-                    id={`q1a${index + 1}`}
-                  />
+              <input
+                type="text"
+                className="form-control mb-3"
+                value={pergunta.texto}
+                onChange={(e) =>
+                  atualizarTextoPergunta(indexPergunta, e.target.value)
+                }
+                required
+              />
+
+              {pergunta.respostas.map((resposta, indexResposta) => (
+                <div
+                  key={indexResposta}
+                  className="mb-2 d-flex align-items-center"
+                >
                   <input
                     type="text"
-                    className="form-control d-inline-block ms-2"
-                    placeholder={`Alternativa ${letter}`}
+                    className="form-control me-2"
+                    value={resposta.texto}
+                    onChange={(e) =>
+                      atualizarTextoResposta(
+                        indexPergunta,
+                        indexResposta,
+                        e.target.value
+                      )
+                    }
+                    placeholder={`Resposta ${indexResposta + 1}`}
+                    required
                   />
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name={`correta-${indexPergunta}`}
+                      checked={resposta.correta}
+                      onChange={() =>
+                        marcarRespostaCorreta(indexPergunta, indexResposta)
+                      }
+                    />
+                    <label className="form-check-label">Correta</label>
+                  </div>
                 </div>
               ))}
-
-              <div className="form-group mt-3">
-                <h3>
-                  <label className="form-label">Categoria</label>
-                </h3>
-                <select
-                  className="form-control"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                >
-                  <option value="">Escolha uma categoria</option>
-                  <option value="1">Anime</option>
-                  <option value="2">Filme</option>
-                  <option value="3">Jogo</option>
-                  <option value="4">Livro</option>
-                </select>
-              </div>
-
-              <div className="mt-3">
-                <button onClick={hanleSubmit} type="submit" className="btn btn-primary me-2">
-                  Salvar Quiz
-                </button>
-                <button  type="button" className="btn btn-danger">
-                  Cancelar
-                </button>
-              </div>
             </div>
           </div>
-        </div>
+        ))}
+
+        <button
+          type="button"
+          className="btn btn-outline-success me-2"
+          onClick={adicionarPergunta}
+          disabled={perguntas.length >= 10}
+        >
+          + Adicionar Pergunta
+        </button>
+
+        <button type="submit" className="btn btn-primary">
+          Criar Quiz
+        </button>
       </form>
     </div>
   );
 }
-
-export default QuizCreator;

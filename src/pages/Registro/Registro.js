@@ -11,6 +11,7 @@ const Registro = () => {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [dataNascimento, setDataNascimento] = useState('');
+    const [tipoUsuario, setTipoUsuario] = useState("1"); 
 
 
     const navigate = useNavigate();
@@ -18,11 +19,14 @@ const Registro = () => {
 const handleSubmit = async (event) => {
     event.preventDefault();
 
+   const tipoUsuarioBoolean = tipoUsuario === "2";
+
     const credentials = {
         nome: nome,
         email: email,
         senha: senha,
-        datanascimento: dataNascimento
+        datanascimento: dataNascimento,
+        is_admin: tipoUsuarioBoolean
     };
 
     try {
@@ -88,7 +92,19 @@ const handleSubmit = async (event) => {
                     value={dataNascimento}
                     onChange={(e)=> setDataNascimento(e.target.value)}/>
                 </div>
+                <div>
+                <label className='label-tipo-registro'>Tipo de Usuário:</label>
+                 <select
+                 value={tipoUsuario}
+                 onChange={(e) => setTipoUsuario(e.target.value)}
+                  className="form-control">
+                  <option value="1">Aluno</option>
+                  <option value="2">Administrador</option>
+                </select>
+                </div>
+                <br></br>
                 <button className='button-registro' type="submit" onClick={handleSubmit}>Registrar</button>
+              
             </form>
         </div>
     );
