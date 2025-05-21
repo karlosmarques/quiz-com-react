@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 function Cards({ quizzes }) {
   const navigate = useNavigate();
 
+
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center' }}>
       {quizzes.map((quiz) => (

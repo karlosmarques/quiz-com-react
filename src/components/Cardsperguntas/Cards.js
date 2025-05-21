@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './Cards.css';
 
 const CardPergunta = ({ perguntas, categoria }) => {
@@ -7,10 +8,8 @@ const CardPergunta = ({ perguntas, categoria }) => {
   const [perguntasEmbaralhadas, setPerguntasEmbaralhadas] = useState([]);
 
   useEffect(() => {
-    // Para cada pergunta, embaralha as respostas (answers)
     const embaralhadas = perguntas.map((q) => {
-      const todas = [...q.answers]; // array de respostas
-      // embaralha array de respostas
+      const todas = [...q.answers];
       const respostasEmbaralhadas = todas.sort(() => Math.random() - 0.5);
       return { ...q, respostas: respostasEmbaralhadas };
     });
@@ -27,6 +26,34 @@ const CardPergunta = ({ perguntas, categoria }) => {
     }
   };
 
+  // Pega o quiz_id da primeira pergunta, assumindo que todas são do mesmo quiz
+  const quizId = perguntas.length > 0 ? perguntas[0].quiz_id : null;
+
+  const enviarPontuacao = async () => {
+    const token = localStorage.getItem('token');
+
+    if (!quizId) {
+      alert("Quiz ID não encontrado.");
+      return;
+    }
+
+    try {
+      await axios.post(
+        'http://localhost:8000/responder-quiz', // Ajuste para a rota correta do seu backend
+        { quiz_id: quizId, score: acertos },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      alert('Pontuação enviada!');
+    } catch (error) {
+      console.error('Erro ao enviar pontuação:', error);
+      alert('Erro ao enviar pontuação. Tente novamente.');
+    }
+  };
+
   return (
     <div className="container-perguntas">
       <h2 className="titulo-categoria">Perguntas de {categoria}</h2>
@@ -35,6 +62,7 @@ const CardPergunta = ({ perguntas, categoria }) => {
       </div>
 
       {perguntasEmbaralhadas.length === 0 && <p>Carregando perguntas...</p>}
+
       {perguntasEmbaralhadas.map((questao, index) => (
         <div key={questao.id} className="card-pergunta">
           <p className="pergunta">{questao.texto}</p>
@@ -62,6 +90,13 @@ const CardPergunta = ({ perguntas, categoria }) => {
           </div>
         </div>
       ))}
+
+      {/* Botão para enviar pontuação aparece só quando todas as perguntas foram respondidas */}
+      {Object.keys(respostasSelecionadas).length === perguntas.length && (
+        <button className="botao-enviar" onClick={enviarPontuacao}>
+          Enviar pontuação
+        </button>
+      )}
     </div>
   );
 };

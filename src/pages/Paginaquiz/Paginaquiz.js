@@ -11,7 +11,7 @@ const Paginaquiz = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchQuiz = async () => {
+    const Quiz = async () => {
       try {
         const token = localStorage.getItem('token');
         const response = await axios.get(`http://localhost:8000/quizzes/${id}`, {
@@ -28,13 +28,13 @@ const Paginaquiz = () => {
       }
     };
 
-    fetchQuiz();
+    Quiz();
   }, [id]);
 
   if (loading) return <p>Carregando quiz...</p>;
   if (error) return <p>{error}</p>;
   if (!quiz) return <p>Quiz não encontrado.</p>;
-
+  console.log(quiz);
   return (
     <div style={{ padding: '2rem' }}>
       <h2>{quiz.titulo}</h2>
