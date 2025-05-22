@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Importa Bootstrap
+import 'bootstrap/dist/css/bootstrap.min.css'; 
 
 const Cards = ({ quizzes, onDelete, isAdmin }) => {
   const navigate = useNavigate();

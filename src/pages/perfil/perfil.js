@@ -4,22 +4,19 @@ import axios from "axios";
 
 const Perfil = () => {
   const [usuario, setUsuario] = useState(null);
-  const [historico, setHistorico] = useState([]);      // Estado para armazenar o histórico de quizzes
-  const [media, setMedia] = useState(0);               // Estado para armazenar a média de desempenho
+  const [historico, setHistorico] = useState([]);     
+  const [media, setMedia] = useState(0);              
   const navigate = useNavigate();
 
   useEffect(() => {
     const buscarDados = async () => {
       try {
         const token = localStorage.getItem('token');
-
-        // Busca dados básicos do usuário
         const usuarioResponse = await axios.get('http://localhost:8000/usuario', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUsuario(usuarioResponse.data.usuario);
 
-        // Busca histórico de quizzes e média de desempenho
         const historicoResponse = await axios.get('http://localhost:8000/historico', {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -28,7 +25,7 @@ const Perfil = () => {
 
       } catch (error) {
         console.error("Erro ao buscar o perfil ou histórico:", error);
-        navigate("/login"); // Redireciona para login se falhar (token inválido ou não autorizado)
+        navigate("/login"); 
       }
     };
 

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Cards from '../../components/Cards/Cards';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode'; // adicionado
-import './Home.css';
+import { jwtDecode } from 'jwt-decode';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Home = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -53,9 +52,45 @@ const Home = () => {
   };
 
   return (
-    <div className='home-container'>
-      <h1 className='title-home'>Quizzes Disponíveis</h1>
-      <Cards quizzes={quizzes} onDelete={handleDelete} isAdmin={isAdmin} />
+    <div className="container py-5">
+      <h1 className="text-center mb-4">Quizzes Disponíveis</h1>
+
+      <div className="row justify-content-center">
+        {quizzes.length > 0 ? (
+          quizzes.map((quiz) => (
+            <div className="col-12 col-sm-8 col-md-6 col-lg-4 col-xl-3 mb-4" key={quiz.id}>
+              <div className="card h-100 shadow-sm">
+                <div className="card-body d-flex flex-column">
+                  <h5 className="card-title text-center">{quiz.titulo}</h5>
+
+                  <img
+                    src="../quiz.png"alt="Quiz"className="img-fluid mb-3"/>
+
+                  <p className="card-text">{quiz.descricao}</p>
+
+                  <div className="mt-auto d-grid gap-2">
+                    <a href={`/quiz/${quiz.id}`} className="btn btn-primary">
+                      Iniciar
+                    </a>
+                    {isAdmin && (
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => handleDelete(quiz.id)}
+                      >
+                        Excluir
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="col-12 text-center">
+            <p className="text-muted">Nenhum quiz disponível.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

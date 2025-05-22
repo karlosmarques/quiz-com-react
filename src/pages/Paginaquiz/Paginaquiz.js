@@ -6,7 +6,7 @@ import CardPergunta from '../../components/Cardsperguntas/Cards';
 
 const Paginaquiz = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
+ 
   const [quiz, setQuiz] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -42,50 +42,12 @@ const Paginaquiz = () => {
     carregarQuiz();
   }, [id]);
 
-  const handleDelete = async () => {
-    const confirm = window.confirm('Tem certeza que deseja excluir este quiz?');
-    if (!confirm) return;
-
-    try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:8000/quizzes/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      alert('Quiz excluído com sucesso!');
-      navigate('/');
-    } catch (err) {
-      console.error('Erro ao deletar quiz:', err);
-      alert('Erro ao excluir quiz');
-    }
-  };
-
   if (loading) return <p>Carregando quiz...</p>;
   if (error) return <p>{error}</p>;
   if (!quiz) return <p>Quiz não encontrado.</p>;
 
   return (
     <div style={{ padding: '2rem' }}>
-      <h2>{quiz.titulo}</h2>
-
-      {isAdmin && (
-        <button
-          onClick={handleDelete}
-          style={{
-            marginBottom: '1rem',
-            backgroundColor: 'red',
-            color: 'white',
-            padding: '0.5rem 1rem',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer'
-          }}
-        >
-          Excluir Quiz
-        </button>
-      )}
-
       <CardPergunta perguntas={quiz.questions} categoria={quiz.titulo} />
     </div>
   );
