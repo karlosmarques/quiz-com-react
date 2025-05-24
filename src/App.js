@@ -11,9 +11,9 @@ import RedefinirSenha from "./pages/Redefinir_senha/RedefinirSenha";
 
 function App() {
   const location = useLocation();
-  // Lista das rotas onde NÃO quer mostrar o Navbar
-  const rotasSemNavbar = ["/login", "/esqueci_minha_senha","/registro"];
-  // Para rota com token, precisa verificar se o pathname começa com essa base
+ 
+  const rotasSemNavbar = ["/", "/esqueci_minha_senha","/registro"];
+
   const isRedefinirSenhaRoute = location.pathname.startsWith("/redefinir-senha");
 
   const mostrarNavbar = !rotasSemNavbar.includes(location.pathname) && !isRedefinirSenhaRoute;
@@ -22,8 +22,8 @@ function App() {
     <div>
       {mostrarNavbar && <Navbar />}
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
         <Route path="/quiz/:id" element={<Paginaquiz />} />
         <Route path="/perfil" element={<Perfil />} />
