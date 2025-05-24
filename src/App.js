@@ -12,7 +12,7 @@ import RedefinirSenha from "./pages/Redefinir_senha/RedefinirSenha";
 function App() {
   const location = useLocation();
  
-  const rotasSemNavbar = ["/", "/esqueci_minha_senha","/registro"];
+  const rotasSemNavbar = ["/login", "/esqueci_minha_senha","/registro"];
 
   const isRedefinirSenhaRoute = location.pathname.startsWith("/redefinir-senha");
 
