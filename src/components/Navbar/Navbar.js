@@ -3,7 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode'; // Certifique-se de ter isso instalado
+import { jwtDecode } from 'jwt-decode'; 
 
 function NavScrollExample() {
   const token = localStorage.getItem("token");
