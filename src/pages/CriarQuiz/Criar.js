@@ -4,127 +4,85 @@ import axios from "axios";
 export default function CreateQuiz() {
   const [titulo, setTitulo] = useState("");
 
-  // Função que cria 4 objetos de respostas distintas
-  const criarRespostasIniciais = () => [
-    { texto: "", correta: false },
-    { texto: "", correta: false },
-    { texto: "", correta: false },
-    { texto: "", correta: false }
-  ];
+  const criarRespostasIniciais = () =>
+    Array(4).fill({ texto: "", correta: false });
 
   const [perguntas, setPerguntas] = useState([
-    {
-      texto: "",
-      respostas: criarRespostasIniciais()
-    }
+    { texto: "", respostas: criarRespostasIniciais() }
   ]);
 
   const adicionarPergunta = () => {
     if (perguntas.length < 10) {
-      setPerguntas([
-        ...perguntas,
-        { texto: "", respostas: criarRespostasIniciais() }
-      ]);
+      setPerguntas([...perguntas, { texto: "", respostas: criarRespostasIniciais() }]);
     }
   };
 
   const excluirPergunta = (index) => {
     if (perguntas.length > 1) {
-      const novasPerguntas = [...perguntas];
-      novasPerguntas.splice(index, 1);
-      setPerguntas(novasPerguntas);
+      setPerguntas(perguntas.filter((_, i) => i !== index));
     }
   };
 
   const atualizarTextoPergunta = (index, texto) => {
-    const novasPerguntas = [...perguntas];
-    novasPerguntas[index].texto = texto;
-    setPerguntas(novasPerguntas);
+    const novas = [...perguntas];
+    novas[index].texto = texto;
+    setPerguntas(novas);
   };
 
-  const atualizarTextoResposta = (indexPergunta, indexResposta, texto) => {
-    const novasPerguntas = [...perguntas];
-    novasPerguntas[indexPergunta].respostas[indexResposta] = {
-      ...novasPerguntas[indexPergunta].respostas[indexResposta],
+  const atualizarTextoResposta = (iPerg, iResp, texto) => {
+    const novas = [...perguntas];
+    novas[iPerg].respostas[iResp] = {
+      ...novas[iPerg].respostas[iResp],
       texto
     };
-    setPerguntas(novasPerguntas);
+    setPerguntas(novas);
   };
 
-  const marcarRespostaCorreta = (indexPergunta, indexResposta) => {
-    const novasPerguntas = [...perguntas];
-    novasPerguntas[indexPergunta].respostas = novasPerguntas[
-      indexPergunta
-    ].respostas.map((resposta, i) => ({
-      ...resposta,
-      correta: i === indexResposta
+  const marcarRespostaCorreta = (iPerg, iCorreta) => {
+    const novas = [...perguntas];
+    novas[iPerg].respostas = novas[iPerg].respostas.map((r, i) => ({
+      ...r,
+      correta: i === iCorreta
     }));
-    setPerguntas(novasPerguntas);
+    setPerguntas(novas);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const token = localStorage.getItem("token");
 
     try {
-      // Criar o quiz
-      const quizResponse = await axios.post(
+      const { data } = await axios.post(
         "http://localhost:8000/quizzes",
         { titulo },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      const quizId = quizResponse.data.quiz.id;
-
-      //Criar perguntas e respostas
-      for (const pergunta of perguntas) {
-        const perguntaResponse = await axios.post(
+      for (const p of perguntas) {
+        const { data: perguntaData } = await axios.post(
           "http://localhost:8000/questions",
-          {
-            quiz_id: quizId,
-            texto: pergunta.texto
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
+          { quiz_id: data.quiz.id, texto: p.texto },
+          { headers: { Authorization: `Bearer ${token}` } }
         );
 
-        const perguntaId = perguntaResponse.data.question.id;
-
-        for (const resposta of pergunta.respostas) {
+        for (const r of p.respostas) {
           await axios.post(
             "http://localhost:8000/answers",
             {
-              question_id: perguntaId,
-              texto: resposta.texto,
-              correta: resposta.correta
+              question_id: perguntaData.question.id,
+              texto: r.texto,
+              correta: r.correta
             },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            }
+            { headers: { Authorization: `Bearer ${token}` } }
           );
         }
       }
 
       alert("Quiz criado com sucesso!");
       setTitulo("");
-      setPerguntas([
-        {
-          texto: "",
-          respostas: criarRespostasIniciais()
-        }
-      ]);
-    } catch (error) {
-      console.error(error);
+      setPerguntas([{ texto: "", respostas: criarRespostasIniciais() }]);
+    } catch (err) {
+      console.error(err);
       alert("Erro ao criar o quiz. Verifique o console.");
     }
   };
@@ -144,17 +102,15 @@ export default function CreateQuiz() {
           />
         </div>
 
-        {perguntas.map((pergunta, indexPergunta) => (
-          <div key={indexPergunta} className="card mb-4">
+        {perguntas.map((pergunta, iPerg) => (
+          <div key={iPerg} className="card mb-4">
             <div className="card-body">
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <label className="form-label mb-0">
-                  Pergunta {indexPergunta + 1}
-                </label>
+              <div className="d-flex justify-content-between mb-3">
+                <label className="form-label mb-0">Pergunta {iPerg + 1}</label>
                 <button
                   type="button"
                   className="btn btn-outline-danger btn-sm"
-                  onClick={() => excluirPergunta(indexPergunta)}
+                  onClick={() => excluirPergunta(iPerg)}
                   disabled={perguntas.length === 1}
                 >
                   Excluir Pergunta
@@ -165,40 +121,29 @@ export default function CreateQuiz() {
                 type="text"
                 className="form-control mb-3"
                 value={pergunta.texto}
-                onChange={(e) =>
-                  atualizarTextoPergunta(indexPergunta, e.target.value)
-                }
+                onChange={(e) => atualizarTextoPergunta(iPerg, e.target.value)}
                 required
               />
 
-              {pergunta.respostas.map((resposta, indexResposta) => (
-                <div
-                  key={indexResposta}
-                  className="mb-2 d-flex align-items-center"
-                >
+              {pergunta.respostas.map((resposta, iResp) => (
+                <div key={iResp} className="mb-2 d-flex align-items-center">
                   <input
                     type="text"
                     className="form-control me-2"
                     value={resposta.texto}
                     onChange={(e) =>
-                      atualizarTextoResposta(
-                        indexPergunta,
-                        indexResposta,
-                        e.target.value
-                      )
+                      atualizarTextoResposta(iPerg, iResp, e.target.value)
                     }
-                    placeholder={`Resposta ${indexResposta + 1}`}
+                    placeholder={`Resposta ${iResp + 1}`}
                     required
                   />
                   <div className="form-check">
                     <input
-                      className="form-check-input"
                       type="radio"
-                      name={`correta-${indexPergunta}`}
+                      className="form-check-input"
+                      name={`correta-${iPerg}`}
                       checked={resposta.correta}
-                      onChange={() =>
-                        marcarRespostaCorreta(indexPergunta, indexResposta)
-                      }
+                      onChange={() => marcarRespostaCorreta(iPerg, iResp)}
                     />
                     <label className="form-check-label">Correta</label>
                   </div>
