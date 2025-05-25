@@ -30,7 +30,6 @@ function NavScrollExample() {
             navbarScroll
           >
             <Nav.Link as={Link} to="/">Home</Nav.Link>
-            <Nav.Link as={Link} to="/login">Login</Nav.Link>
             <Nav.Link as={Link} to="/perfil">Perfil</Nav.Link>
 
             {isAdmin && (
