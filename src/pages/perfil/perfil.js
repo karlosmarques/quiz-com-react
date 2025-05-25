@@ -47,7 +47,7 @@ const Perfil = () => {
         <div className="row justify-content-center">
           <div className="col-md-6">
             <img
-              src="/thebruxo.png"
+              src="/perfil.png"
               className="rounded-circle mx-auto d-block mb-3"
               alt="Foto de perfil"
               style={{ width: '150px', height: '150px' }}
