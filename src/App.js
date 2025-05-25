@@ -22,8 +22,8 @@ function App() {
     <div>
       {mostrarNavbar && <Navbar />}
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
         <Route path="/quiz/:id" element={<Paginaquiz />} />
         <Route path="/perfil" element={<Perfil />} />
