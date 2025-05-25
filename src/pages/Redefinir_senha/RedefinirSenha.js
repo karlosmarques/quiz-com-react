@@ -25,7 +25,7 @@ const RedefinirSenha = () => {
         novaSenha,
       });
       setMensagem('Senha redefinida com sucesso!');
-      setTimeout(() => navigate('/login'), 2000);
+      setTimeout(() => navigate('/'), 2000);
     } catch (err) {
       console.error(err);
       setErro(err.response?.data?.message || 'Erro ao redefinir senha.');
