@@ -1,70 +1,94 @@
-# Getting Started with Create React App
+ # Quiz da Galera
+Este projeto é um sistema de quiz onde **apenas administradores autenticados** podem
+**criar, editar e excluir quizzes**, enquanto **alunos logados** podem **responder quizzes e
+visualizar os resultados**.
+## 1. Tecnologias Utilizadas
+### 1.1 Back-end
+- **Node.js** + **Express** – Servidor da aplicação
+- **Prisma** – ORM para acesso ao banco de dados
+- **MySQL** – Banco de dados relacional
+- **bcrypt** – Criptografia de senhas
+- **jsonwebtoken** – Autenticação via JWT
+- **dotenv** – Variáveis de ambiente
+- **nodemailer** – Envio de e-mails
+- **cors** – Permissão de requisições entre front-end e back-end
+### 1.2 Front-end
+- **React** – Biblioteca para criação da interface
+- **React Router DOM** – Gerenciamento de rotas
+- **Axios** – Comunicação com o back-end
+- **Bootstrap + React Bootstrap** – Estilização
+- **jwt-decode** – Decodificação de token JWT
+---
+## 2. Como Rodar o Projeto
+### 2.1 Clonando o Repositório Back
+```bash
+$ git clone git@github.com:karlosmarques/quiz-back.git
+````
+### 2.2 Clonando o Repositório Front
+```bash
+$ git clone git@github.com:karlosmarques/quiz-front.git
+````
+### 2.3 Rodar o Back-End
+> Certifique-se de ter o banco de dados MySQL configurado corretamente e as variáveis no
+arquivo `.env`.
+```bash
+cd quiz-back
+npm i
+npx prisma generate
+node --watch server.js
+````
+### 2.4 Rodar o Front-End
+```bash
+cd quiz-front
+npm i
+npm start
+````
+## 3. Funcionalidades
+-✅ Login de usuários e administradores
+-✅ Resposta a quizzes com exibição de resultado
+-✅ Área administrativa com criação, edição e exclusão de quizzes
+-✅ Proteção de rotas por autenticação
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 4. Estrutura do Projeto
+```
 
-## Available Scripts
+├── quiz-front
+│   ├── public/
+│   ├── src/
+│   │   ├── components/                <- 
+│   │   │   ├── Cards/                 <- 
+│   │   │   ├── Cardsperguntas/        <- 
+│   │   │   └── Navbar/                <- Navegação principal
+│   │   ├── pages/                     <- Páginas do projeto
+│   │   │   ├── CriarQuiz/             <- Criar um novo quiz com perguntas e respostas
+│   │   │   ├── Esqueci_minha_senha/   <- Página de recuperação de senha
+│   │   │   ├── Home/                  <- Quizzes disponíveis e funcionalidades específicas do administrador
+│   │   │   ├── Login/                 <- Página de autenticação
+│   │   │   ├── Paginaquiz/            <- Exibe um quiz específico
+│   │   │   └── perfil/                <- Página de perfil do usuário
+│   │   │   ├── Redefinir_senha/       <- Permite que o usuário redefina sua senha
+│   │   │   └── Registro/              <- Registrar novos usuários
+│   │   │   └── App.js                 <- Conecta cada URL com um componente   
+│   │   │   └── index.js               <- Inicializa toda a aplicação no navegador
+│   ├── package.json                   <- Dependências e scripts
+│   ├── package-lock.json             
+│   └── README.md
 
-In the project directory, you can run:
+      
+├── quiz-back/
+│   ├── middlewares/                  <- 
+│   │   ├── auth.js                   <- Protege rotas do usuário autenticado
+│   │   └── isAdmin.js                <- Verifica se o usuário autenticado é administrador
+│   ├── node_modules/                 <- Pacotes e dependências do projeto
+│   ├── prisma/                       <- 
+│   │   └── schema.prisma             <- Estrutura do banco de dados
+│   └── routes/                       <- 
+│   │   ├── publica.js                <- 
+│   │   └── privada.js                <- 
+│   ├── package.json                  <- Dependências e scripts
+│   ├── package-lock.json             <-
+│   ├── server.js                     <-
+│   ├── .env                          <-
+│   └── README.md                     <-
+```       
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
