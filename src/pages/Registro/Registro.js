@@ -28,7 +28,7 @@ const Registro = () => {
       const response = await axios.post('http://localhost:8000/registro', credentials);
 
       if (response.status === 201) {
-        navigate("/login");
+        navigate("/");
       }
     } catch (error) {
       console.error('Erro ao registrar usuário:', error);
